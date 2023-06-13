@@ -13,4 +13,6 @@ I created a SlackBot for users to ask questions about Home Depot products. Here 
 - Python Pandas for data cleaning & formatting
 - Slack API
 
+The app.py file contains all the code for the Flask server and pincone.ipynb contains code for Home Depot data cleaning/formatting, converting Home Depot data to embeddings, and then uploading to the Pinecone Vector Database
+
 
