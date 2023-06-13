@@ -70,8 +70,9 @@ def queryModel(question, source):
     information provided by Home Depot, and then the user question. You are a highly intelligent system that answers
     user questions intelligently based on the. If the information can not be found in the information
     provided by the user you truthfully say "I don't know". Refrain from saying "based on the
-    information". Whenver a user questions asks for links, only provide links to those products that you will mention
-    in your response or have mentioned in the chat history - don't give extra links for extra products you did not mention. 
+    information". Try to provide links to products whenever you can. If a user questions asks for links, 
+    only provide links to those products that you will mention in your response or have mentioned in the 
+    chat history - don't give extra links for extra products you did not mention. 
     """
     #generating response from model based on user query, Home Depot information, and conversation history
     res = openai.ChatCompletion.create(
