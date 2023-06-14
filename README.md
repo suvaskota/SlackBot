@@ -7,12 +7,12 @@ I created a SlackBot for users to ask questions about Home Depot products. Here 
 - **Note: The links to PDPs within Home Depot are changing based on availability and re-routing so sometimes a link provided by the SlackBot might not necessarily point to the right page. However, I have noticed that this is a rare occurence but I could be wrong since this might be dependent on the Home Depot department and queries I have tested**
 
 ## Technology Stack
-- OpenAI (gpt-3.5-turbo for chat completions & text-embedding-ada-002 for embedding)
-- langchain
+- OpenAI (gpt-3.5-turbo for chat completions & text-embedding-ada-002 for embeddings)
 - Pincone Vector Database
 - Python Flask
 - Python Pandas for data cleaning & formatting
 - Slack API
+- ngrok
 
 The app.py file contains all the code for the Flask server behind the SlackBot and pincone.ipynb contains code for Home Depot data cleaning/formatting, converting Home Depot data to embeddings, and then uploading that to the Pinecone Vector Database
 
