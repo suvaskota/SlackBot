@@ -1,15 +1,10 @@
 import os
-from slack_sdk import WebClient
-from slack_sdk.errors import SlackApiError
 from slack_bolt.adapter.flask import SlackRequestHandler
 from slack_bolt import App
 from dotenv import find_dotenv, load_dotenv
 from flask import Flask, request
 import pinecone
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.vectorstores import Pinecone
 from langchain.chains.qa_with_sources import load_qa_with_sources_chain
-from langchain.llms import OpenAI
 import openai
 
 #loading the environment
@@ -46,15 +41,19 @@ def queryModel(question, source):
         return "Cleared!"
     
     #embedding the user query
+    if source == "message":
+        arg = [dmHistory + question]
+    elif source == "channel":
+        arg = [channelHistory + question]
     embed_model = "text-embedding-ada-002"
     res = openai.Embedding.create(
-        input=[question],
+        input=arg,
         engine=embed_model
     )
 
     # retrieve from Pinecone
     xq = res['data'][0]['embedding']
-    res = index.query(xq, top_k=3, include_metadata=True)
+    res = index.query(xq, top_k=5, include_metadata=True)
 
     # get relevant information from Home Depot
     contexts = [item['metadata']['text'] for item in res['matches']]
@@ -66,13 +65,11 @@ def queryModel(question, source):
         augmented_query = channelHistory + "\n\n---\n\n".join(contexts)+"\n\n-----\n\n"+question
 
     # system message to 'prime' the model
-    primer = f"""You are Q&A bot. You are given input in the following order - chat history, 
-    information provided by Home Depot, and then the user question. You are a highly intelligent system that answers
-    user questions. If the information can not be found in the information
-    provided by the user you truthfully say "I don't know". Refrain from saying "based on the
-    information". Try to provide links to products whenever you can. If a user questions asks for links, 
-    only provide links to those products that you will mention in your response or have mentioned in the 
-    chat history - don't give extra links for extra products you did not mention. 
+    primer = f"""You are Q&A bot representing Home Depot. You are given input in the following order - chat history, 
+    relevant information provided by Home Depot in regards to the user question, and then the user question. 
+    You are a highly intelligent system that answers user questions intelligently. If the information can not be found 
+    in the information provided before the user question you truthfully say "I don't know". Refrain from saying "based on the
+    information". Provide links to products whenever possible. 
     """
     #generating response from model based on user query, Home Depot information, and conversation history
     res = openai.ChatCompletion.create(
