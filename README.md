@@ -16,4 +16,6 @@ I created a SlackBot for users to ask questions about Home Depot products. Here 
 
 The app.py file contains all the code for the Flask server behind the SlackBot and pincone.ipynb contains code for Home Depot data cleaning/formatting, converting Home Depot data to embeddings, and then uploading that to the Pinecone Vector Database
 
+Link to Demo: https://drive.google.com/file/d/1dO3fn6OOIDCjSaRsgNMI-njfm_T0jxhP/view?usp=sharing
+
 
